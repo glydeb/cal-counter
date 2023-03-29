@@ -21,5 +21,5 @@ class FoodItem(models.Model):
 class FoodItemConsumption(models.Model):
     food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
+    meal = models.ForeignKey(Plate, on_delete=models.CASCADE)
     amount = models.FloatField()
