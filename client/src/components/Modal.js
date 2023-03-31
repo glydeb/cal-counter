@@ -61,16 +61,15 @@ export default class CustomModal extends Component {
                 placeholder="Enter plate description"
               />
             </FormGroup>
-            <FormGroup check>
-              <Label check>
+            <FormGroup>
+              <Label for="plate-calories">Calories</Label>
                 <Input
-                  type="checkbox"
-                  name="completed"
-                  checked={this.state.activeItem.completed}
+                  type="number"
+                  id="plate-calories"
+                  name="calories"
+                  checked={this.state.activeItem.calories}
                   onChange={this.handleChange}
                 />
-                Completed
-              </Label>
             </FormGroup>
           </Form>
         </ModalBody>

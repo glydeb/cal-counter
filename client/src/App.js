@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import Modal from "./components/Modal";
 
 const plates = [
   {
@@ -32,7 +32,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewcalories: false,
+      modal: false,
       activeItem: {
         title: "",
         description: "",
@@ -41,6 +41,29 @@ class App extends Component {
       plateList: plates,
     };
   }
+
+  toggle = () => {
+    this.setState({ modal: !this.state.modal });
+  };
+  
+  handleSubmit = (item) => {
+    this.toggle();
+
+    alert("save" + JSON.stringify(item));
+  };
+
+  handleDelete = (item) => {
+    alert("delete" + JSON.stringify(item));
+  };
+
+  createItem = () => {
+    const item = { title: "", description: "", calories: 0 };
+    this.setState({ activeItem: item, modal: !this.state.modal });
+  };
+
+  editItem = (item) => {
+    this.setState({ activeItem: item, modal: !this.state.modal });
+  };
 
   renderItems = () => {
     const newItems = this.state.plateList
@@ -59,11 +82,13 @@ class App extends Component {
         <span>
           <button
             className="btn btn-secondary mr-2"
+            onClick={() => this.editItem(item)}
           >
             Edit
           </button>
           <button
             className="btn btn-danger"
+            onClick={() => this.handleDelete(item)}
           >
             Delete
           </button>
@@ -82,6 +107,7 @@ class App extends Component {
               <div className="mb-4">
                 <button
                   className="btn btn-primary"
+                  onClick={() => this.createItem()}
                 >
                   Add plate
                 </button>
@@ -92,6 +118,13 @@ class App extends Component {
             </div>
           </div>
         </div>
+        {this.state.modal && (
+          <Modal
+            activeItem={this.state.activeItem}
+            toggle={this.toggle}
+            onSave={this.handleSubmit}
+          />
+        )}
       </main>
     );
   }
