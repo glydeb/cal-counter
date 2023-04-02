@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Modal from "./components/Modal";
+import axios from "axios";
 
 const plates = [
   {
@@ -40,6 +41,17 @@ class App extends Component {
       },
       plateList: plates,
     };
+  }
+
+  componentDidMount() {
+    this.refreshList();
+  }
+
+  refreshList() {
+    return axios
+      .get("http://localhost:8000/api/plates/")
+      .then((res) => this.setState({ plateList: res.data }))
+      .catch((err) => console.log(err));
   }
 
   toggle = () => {

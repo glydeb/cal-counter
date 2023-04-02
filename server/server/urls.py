@@ -24,4 +24,5 @@ router.register(r'plates', views.PlateView, 'cal_counter')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/login/', views.LoginView.as_view(), name='api_login')
 ]
