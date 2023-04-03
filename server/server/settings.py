@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'cal_counter'
+    'cal_counter',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
