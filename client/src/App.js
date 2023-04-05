@@ -37,7 +37,8 @@ class App extends Component {
       activeItem: {
         title: "",
         description: "",
-        calories: 0
+        calories: 0,
+        time: new Date(),
       },
       plateList: plates,
     };
@@ -61,7 +62,15 @@ class App extends Component {
   handleSubmit = (item) => {
     this.toggle();
 
-    alert("save" + JSON.stringify(item));
+    if(item.id) {
+      axios
+        .put(`http://localhost:8000/api/plates/${item.id}/`, item)
+        .then((res) => this.refreshList());
+      return;
+    }
+    axios
+      .post("http://localhost:8000/api/plates/", item)
+      .then((res) => this.refreshList());
   };
 
   handleDelete = (item) => {

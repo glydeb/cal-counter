@@ -7,9 +7,11 @@ import {
   ModalFooter,
   Form,
   FormGroup,
+  FormText,
   Input,
   Label,
 } from "reactstrap";
+import DateTimePicker from 'react-datetime-picker';
 
 export default class CustomModal extends Component {
   constructor(props) {
@@ -69,6 +71,25 @@ export default class CustomModal extends Component {
                   name="calories"
                   checked={this.state.activeItem.calories}
                   onChange={this.handleChange}
+                />
+            </FormGroup>
+            <FormGroup>
+              <Label for="plate-user">User</Label>
+                <Input
+                  type="number"
+                  id="plate-user"
+                  name="user"
+                  checked={this.state.activeItem.user}
+                  onChange={this.handleChange}
+                />
+            </FormGroup>
+            <FormGroup>
+                <Label>Time</Label>
+                <DateTimePicker
+                    id="plate-time"
+                    name="time"
+                    value={this.state.activeItem.time}
+                    onChange={this.handleChange}
                 />
             </FormGroup>
           </Form>

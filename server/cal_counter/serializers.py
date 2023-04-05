@@ -4,4 +4,4 @@ from .models import Plate
 class PlateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plate
-        fields = ('id', 'title', 'description', 'calories', 'time')
+        fields = ('id', 'title', 'description', 'calories', 'time', 'user')
