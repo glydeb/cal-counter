@@ -78,7 +78,7 @@ class App extends Component {
   };
 
   createItem = () => {
-    const item = { title: "", description: "", calories: 0 };
+    const item = { title: "", description: "", calories: 0, user: 1, time: new Date() };
     this.setState({ activeItem: item, modal: !this.state.modal });
   };
 
