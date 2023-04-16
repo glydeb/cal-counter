@@ -1,19 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Plates from './components/Plates';
+import Login from './components/Login';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="container">
-        <Router>
-          <Routes>
-            <Route path="/" Component={Plates} />
-          </Routes>
-        </Router>
-      </div>
-    );
+export default function App() {
+  const [token, setToken] = React.useState(null);
+
+  if (!token) {
+    return <Login setToken={setToken} />;
   }
-}
 
-export default App;
+  return (
+    <div className="container">
+      <Router>
+        <Routes>
+          <Route path="/" Component={Plates} />
+        </Routes>
+      </Router>
+    </div>
+  );
+}
