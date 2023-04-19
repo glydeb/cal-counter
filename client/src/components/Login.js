@@ -11,6 +11,10 @@ async function loginUser(credentials) {
         .then(res => res.data)
 }
 
+function storeToken(userToken) {
+  sessionStorage.setItem('token', JSON.stringify(userToken));
+}
+
 export default function Login(props) {
     const { setToken } = props;
     const [credentials, setCredentials] = React.useState({ username: '', password: '' });
@@ -26,11 +30,12 @@ export default function Login(props) {
             username: credentials.username,
             password: credentials.password
         });
+        storeToken(token);
         setToken(token);
     }
 
     return (
-        <Form>
+        <Form onSubmit={handleLogin}>
           <FormGroup>
             <Label for="login-user">Username</Label>
             <Input
@@ -50,8 +55,8 @@ export default function Login(props) {
               onChange={handleChange}
             />
             <Button
+              type="submit"
               color="success"
-              onClick={handleLogin}
             >
                 Submit
             </Button>
