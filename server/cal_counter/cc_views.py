@@ -10,6 +10,8 @@ from .serializers import PlateSerializer
 from .models import Plate
 
 class PlateView(viewsets.ModelViewSet):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = PlateSerializer
     queryset = Plate.objects.all()
 
