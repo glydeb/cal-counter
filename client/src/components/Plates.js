@@ -1,70 +1,70 @@
-import React, { Component } from "react";
+import React from "react";
 import Modal from "./Modal";
 import axios from "axios";
 
-class Plates extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      modal: false,
-      activeItem: {
-        title: "",
-        description: "",
-        calories: 0,
-        time: new Date(),
-      },
-      plateList: [],
-    };
-  }
+export default function Plates(props) {
+  const { user } = props;
+  const [plates, setPlates] = React.useState([]);
+  const [modal, setModal] = React.useState(false);
+  const [activeItem, setActiveItem] = React.useState({
+    title: "",
+    description: "",
+    calories: 0,
+    time: new Date(),
+  });
 
-  componentDidMount() {
-    this.refreshList();
-  }
+  const axiosConfig = { "headers": {"Authorization": `Token ${user.token}` }};
+  React.useEffect(() => {
+    if (!modal) {
+      console.log(`getting plates with token ${user.token}`)
+      axios
+        .get("http://localhost:8000/api/plates/", axiosConfig)
+        .then((res) => setPlates(res.data))
+        .catch((err) => console.log(err));
+    }
+  }, [modal]);
 
-  refreshList() {
-    return axios
-      .get("http://localhost:8000/api/plates/")
-      .then((res) => this.setState({ plateList: res.data }))
-      .catch((err) => console.log(err));
-  }
-
-  toggle = () => {
-    this.setState({ modal: !this.state.modal });
+  function toggle() {
+    setModal(prevModal => !prevModal);
   };
   
-  handleSubmit = (item) => {
-    this.toggle();
-
+  function handleSubmit(item) {
     if(item.id) {
       axios
         .put(`http://localhost:8000/api/plates/${item.id}/`, item)
-        .then((res) => this.refreshList());
+        .then((res) => toggle())
+        .catch((err) => console.log(err));
       return;
     }
     axios
       .post("http://localhost:8000/api/plates/", item)
-      .then((res) => this.refreshList());
+      .then((res) => toggle())
+      .catch((err) => console.log(err));
+      
   };
 
-  handleDelete = (item) => {
+  function handleDelete(item) {
     axios
       .delete(`http://localhost:8000/api/plates/${item.id}`)
-      .then((res) => this.refreshList());
+      .then((res) => setModal(false));
   };
 
-  createItem = () => {
-    const item = { title: "", description: "", calories: 0, user: 1, time: new Date() };
-    this.setState({ activeItem: item, modal: !this.state.modal });
+  function handleLogout() {
+    sessionStorage.removeItem('token');
+    props.setUser({name: "", token: ""});
+  }
+
+  function createItem() {
+    setActiveItem({ title: "", description: "", calories: 0, user: 1, time: new Date() })
+    toggle()
   };
 
-  editItem = (item) => {
-    this.setState({ activeItem: item, modal: !this.state.modal });
+  function editItem(item) {
+    setActiveItem(item)
+    toggle()
   };
 
-  renderItems = () => {
-    const newItems = this.state.plateList
-
-    return newItems.map((item) => (
+  const plateElements =  plates.map((item) => (
       <li
         key={item.id}
         className="list-group-item d-flex justify-content-between align-items-center"
@@ -78,51 +78,48 @@ class Plates extends Component {
         <span>
           <button
             className="btn btn-secondary mr-2"
-            onClick={() => this.editItem(item)}
+            onClick={() => editItem(item)}
           >
             Edit
           </button>
           <button
             className="btn btn-danger"
-            onClick={() => this.handleDelete(item)}
+            onClick={() => handleDelete(item)}
           >
             Delete
           </button>
         </span>
       </li>
     ));
-  };
 
-  render() {
-    return (
-      <main className="container">
-        <h1 className="text-blue text-uppercase text-center my-4">Calorie Counter app</h1>
-        <div className="row">
-          <div className="col-md-6 col-sm-10 mx-auto p-0">
-            <div className="card p-3">
-              <div className="mb-4">
-                <button
-                  className="btn btn-primary"
-                  onClick={() => this.createItem()}
-                >
-                  Add plate
-                </button>
-              </div>
-              <ul className="list-group list-group-flush border-top-0">
-                {this.renderItems()}
-              </ul>
+  return (
+    <main className="container">
+      <h1 className="text-blue text-uppercase text-center my-4">Calorie Counter app</h1>
+      <p>Hello, {user.name}<button onClick={handleLogout}>Logout</button></p>
+      <div className="row">
+        <div className="col-md-6 col-sm-10 mx-auto p-0">
+          <div className="card p-3">
+            <div className="mb-4">
+              <button
+                className="btn btn-primary"
+                onClick={() => createItem()}
+              >
+                Add plate
+              </button>
             </div>
+            <ul className="list-group list-group-flush border-top-0">
+              {plateElements}
+            </ul>
           </div>
         </div>
-        {this.state.modal && (
-          <Modal
-            activeItem={this.state.activeItem}
-            toggle={this.toggle}
-            onSave={this.handleSubmit}
-          />
-        )}
-      </main>
-    );
-  }
+      </div>
+      {modal && (
+        <Modal
+          activeItem={activeItem}
+          toggle={toggle}
+          onSave={handleSubmit}
+        />
+      )}
+    </main>
+  );
 }
-export default Plates;

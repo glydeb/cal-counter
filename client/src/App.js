@@ -8,21 +8,21 @@ function getToken() {
 }
 
 export default function App() {
-  const [token, setToken] = React.useState('');
+  const [user, setUser] = React.useState({});
   React.useEffect(
-    () => setToken(getToken()),
+    () => setUser({firstname: "", token: getToken()}),
     []
   );
 
-  if (!token) {
-    return <Login setToken={setToken} />;
+  if (!user.token) {
+    return <Login setUser={setUser} />;
   }
 
   return (
     <div className="container">
       <Router>
         <Routes>
-          <Route path="/" Component={Plates} />
+          <Route path="/" element={<Plates user={user}/>} />
         </Routes>
       </Router>
     </div>

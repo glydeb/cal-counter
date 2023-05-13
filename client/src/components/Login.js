@@ -16,7 +16,7 @@ function storeToken(userToken) {
 }
 
 export default function Login(props) {
-    const { setToken } = props;
+    const { setUser } = props;
     const [credentials, setCredentials] = React.useState({ username: '', password: '' });
 
     function handleChange(event) {
@@ -31,7 +31,7 @@ export default function Login(props) {
             password: credentials.password
         });
         storeToken(token);
-        setToken(token);
+        setUser({"user": "Glydewell", "token": token});
     }
 
     return (

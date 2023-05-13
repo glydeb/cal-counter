@@ -13,7 +13,8 @@ class PlateView(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = PlateSerializer
-    queryset = Plate.objects.all()
+    def get_queryset(self):
+        return Plate.objects.filter(user=self.request.user.id)
 
 
 class LoginView(APIView):
